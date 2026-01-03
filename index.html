@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EJ Tours - Document Generator</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- jsPDF for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['DM Sans', 'sans-serif'],
+                        display: ['Sora', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            DEFAULT: '#1a365d',
+                            light: '#2d4a75',
+                            dark: '#0f1e36',
+                        },
+                        accent: {
+                            DEFAULT: '#d97706',
+                            light: '#f59e0b',
+                            dark: '#b45309',
+                        },
+                        gray: {
+                            50: '#fafafa',
+                            100: '#f5f5f5',
+                            200: '#e5e5e5',
+                            300: '#d4d4d4',
+                            400: '#a3a3a3',
+                            500: '#737373',
+                            600: '#525252',
+                            700: '#404040',
+                            800: '#262626',
+                            900: '#171717',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        * { 
+            -webkit-tap-highlight-color: transparent;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        body { 
+            font-family: 'DM Sans', sans-serif;
+            letter-spacing: -0.01em;
+        }
+        .fade-in { 
+            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1); 
+        }
+        @keyframes fadeIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0);
+            }
+        }
+        .card-hover { 
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .card-hover:hover { 
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.15);
+        }
+        .card-hover:active { 
+            transform: translateY(-4px) scale(0.99);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #1a365d 0%, #2d4a75 100%);
+            box-shadow: 0 4px 16px rgba(26, 54, 93, 0.3);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .btn-primary:hover {
+            box-shadow: 0 8px 24px rgba(26, 54, 93, 0.4);
+            transform: translateY(-2px);
+        }
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        .input-focus {
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .input-focus:focus {
+            box-shadow: 0 0 0 4px rgba(26, 54, 93, 0.08);
+        }
+    </style>
+</head>
+<body class="bg-white min-h-screen">
+
+    <!-- App Container -->
+    <div id="app"></div>
+
+    <script>
+        // Company Details (stored in localStorage)
+        let companyDetails = {
+            name: 'EJ TOURS AND PROJECTS',
+            address: '11A Halman Walk',
+            suburb: 'Hanover Park',
+            city: 'Cape Town',
+            province: 'Western Cape',
+            postal: '7780',
+            bank: 'FNB',
+            accountType: 'Business Account',
+            accountNumber: '62865392676',
+            branchCode: '250114',
+        };
+
+        // Load saved settings
+        const savedDetails = localStorage.getItem('ejToursCompany');
+        if (savedDetails) {
+            companyDetails = JSON.parse(savedDetails);
+        }
+
+        // Current view state
+        let currentView = 'home';
+
+        // Router
+        function navigate(view) {
+            currentView = view;
+            render();
+        }
+
+        // Home Screen
+        function renderHome() {
+            return `
+                <div class="fade-in p-8 max-w-6xl mx-auto">
+                    <!-- Header -->
+                    <div class="text-center mb-20 pt-12">
+                        <h1 class="text-6xl md:text-7xl font-display font-bold text-gray-900 mb-3 tracking-tight">
+                            EJ TOURS
+                        </h1>
+                        <p class="text-lg text-gray-500 font-light tracking-wide">
+                            Document Generator
+                        </p>
+                    </div>
+
+                    <!-- Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+                        <!-- Quote Card -->
+                        <button onclick="navigate('quote')" class="card-hover bg-white rounded-3xl p-10 shadow-sm border border-gray-100 text-left group">
+                            <div class="w-14 h-14 bg-primary/5 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-primary/10 transition-colors">
+                                <svg class="w-7 h-7 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-display font-semibold text-gray-900 mb-2">Quote</h3>
+                            <p class="text-gray-500 text-sm leading-relaxed">Generate professional quote</p>
+                        </button>
+
+                        <!-- Invoice Card -->
+                        <button onclick="navigate('invoice')" class="card-hover bg-white rounded-3xl p-10 shadow-sm border border-gray-100 text-left group">
+                            <div class="w-14 h-14 bg-accent/5 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-accent/10 transition-colors">
+                                <svg class="w-7 h-7 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-display font-semibold text-gray-900 mb-2">Invoice</h3>
+                            <p class="text-gray-500 text-sm leading-relaxed">Create invoice with payment info</p>
+                        </button>
+
+                        <!-- Settings Card -->
+                        <button onclick="navigate('settings')" class="card-hover bg-white rounded-3xl p-10 shadow-sm border border-gray-100 text-left group">
+                            <div class="w-14 h-14 bg-gray-600/5 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-gray-600/10 transition-colors">
+                                <svg class="w-7 h-7 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-display font-semibold text-gray-900 mb-2">Settings</h3>
+                            <p class="text-gray-500 text-sm leading-relaxed">Update company information</p>
+                        </button>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="text-center pt-8 border-t border-gray-100">
+                        <p class="text-sm text-gray-400">
+                            Developed by <span class="font-medium text-gray-600">Gylan Gorrah</span>
+                        </p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Quote Form
+        function renderQuote() {
+            return `
+                <div class="fade-in p-8 max-w-3xl mx-auto">
+                    <!-- Back Button -->
+                    <button onclick="navigate('home')" class="flex items-center gap-2 text-gray-500 hover:text-primary transition-colors mb-10 group">
+                        <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                        </svg>
+                        <span class="font-medium">Back</span>
+                    </button>
+
+                    <!-- Header -->
+                    <div class="mb-12">
+                        <h2 class="text-4xl font-display font-bold text-gray-900 mb-3 tracking-tight">Create Quote</h2>
+                        <p class="text-gray-500">Generate a professional quote for your client</p>
+                    </div>
+
+                    <!-- Form -->
+                    <form onsubmit="handleQuoteSubmit(event)" class="bg-white rounded-3xl p-10 border border-gray-100 space-y-8">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-3">Client Name</label>
+                            <input type="text" id="clientName" required
+                                   class="input-focus w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:border-primary focus:bg-white transition-all outline-none text-gray-900"
+                                   placeholder="Professional Vision Group">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-3">Service Description</label>
+                            <textarea id="description" rows="4" required
+                                      class="input-focus w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:border-primary focus:bg-white transition-all outline-none resize-none text-gray-900"
+                                      placeholder="Describe the service being quoted..."></textarea>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-3">Amount (R)</label>
+                                <input type="number" id="amount" step="0.01" required
+                                       class="input-focus w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:border-primary focus:bg-white transition-all outline-none text-gray-900"
+                                       placeholder="2500.00">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-3">Date</label>
+                                <input type="date" id="date"
+                                       class="input-focus w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:border-primary focus:bg-white transition-all outline-none text-gray-900">
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4 pt-6">
+                            <button type="button" onclick="navigate('home')"
+                                    class="flex-1 px-8 py-4 bg-gray-100 text-gray-700 rounded-2xl font-medium hover:bg-gray-200 active:scale-[0.98] transition-all">
+                                Cancel
+                            </button>
+                            <button type="submit"
+                                    class="btn-primary flex-1 px-8 py-4 text-white rounded-2xl font-medium active:scale-[0.98]">
+                                Generate Quote
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Dev Credit -->
+                    <div class="text-center mt-12">
+                        <p class="text-sm text-gray-400">
+                            Developed by <span class="font-medium text-gray-600">Gylan Gorrah</span>
+                        </p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Invoice Form
+        function renderInvoice() {
+            return `
+                <div class="fade-in p-8 max-w-3xl mx-auto">
+                    <!-- Back Button -->
+                    <button onclick="navigate('home')" class="flex items-center gap-2 text-gray-500 hover:text-primary transition-colors mb-10 group">
+                        <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                        </svg>
+                        <span class="font-medium">Back</span>
+                    </button>
+
+                    <!-- Header -->
+                    <div class="mb-12">
+                        <h2 class="text-4xl font-display font-bold text-gray-900 mb-3 tracking-tight">Create Invoice</h2>
+                        <p class="text-gray-500">Generate an invoice with payment details</p>
+                    </div>
+
+                    <!-- Form -->
+                    <form onsubmit="handleInvoiceSubmit(event)" class="bg-white rounded-3xl p-10 border border-gray-100 space-y-8">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-3">Invoice Number</label>
+                            <input type="text" id="invoiceNumber" required
+                                   class="input-focus w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:border-primary focus:bg-white transition-all outline-none text-gray-900"
+                                   placeholder="131">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-3">Client Name</label>
+                            <input type="text" id="clientName" required
+                                   class="input-focus w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:border-primary focus:bg-white transition-all outline-none text-gray-900"
+                                   placeholder="Professional Vision Group">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-3">Service Description</label>
+                            <textarea id="description" rows="4" required
+                                      class="input-focus w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:border-primary focus:bg-white transition-all outline-none resize-none text-gray-900"
+                                      placeholder="Describe the service provided..."></textarea>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-3">Amount (R)</label>
+                                <input type="number" id="amount" step="0.01" required
+                                       class="input-focus w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:border-primary focus:bg-white transition-all outline-none text-gray-900"
+                                       placeholder="2500.00">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-3">Date</label>
+                                <input type="date" id="date"
+                                       class="input-focus w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:border-primary focus:bg-white transition-all outline-none text-gray-900">
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4 pt-6">
+                            <button type="button" onclick="navigate('home')"
+                                    class="flex-1 px-8 py-4 bg-gray-100 text-gray-700 rounded-2xl font-medium hover:bg-gray-200 active:scale-[0.98] transition-all">
+                                Cancel
+                            </button>
+                            <button type="submit"
+                                    class="btn-primary flex-1 px-8 py-4 text-white rounded-2xl font-medium active:scale-[0.98]">
+                                Generate Invoice
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Dev Credit -->
+                    <div class="text-center mt-12">
+                        <p class="text-sm text-gray-400">
+                            Developed by <span class="font-medium text-gray-600">Gylan Gorrah</span>
+                        </p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Settings Form
+        function renderSettings() {
+            return `
+                <div class="fade-in p-8 max-w-3xl mx-auto">
+                    <!-- Back Button -->
+                    <button onclick="navigate('home')" class="flex items-center gap-2 text-gray-500 hover:text-primary transition-colors mb-10 group">
+                        <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                        </svg>
+                        <span class="font-medium">Back</span>
+                    </button>
+
+                    <!-- Header -->
+                    <div class="mb-12">
+                        <h2 class="text-4xl font-display font-bold text-gray-900 mb-3 tracking-tight">Company Settings</h2>
+                        <p class="text-gray-500">Update your business information</p>
+                    </div>
+
+                    <!-- Form -->
+                    <form onsubmit="handleSettingsSave(event)" class="bg-white rounded-3xl p-10 border border-gray-100 space-y-8">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-3">Company Name</label>
+                            <input type="text" id="name" value="${companyDetails.name}"
+                                   class="input-focus w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:border-primary focus:bg-white transition-all outline-none text-gray-900">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-3">Address</label>
+                            <input type="text" id="address" value="${companyDetails.address}"
+                                   class="input-focus w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:border-primary focus:bg-white transition-all outline-none text-gray-900">
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-3">Suburb</label>
+                                <input type="text" id="suburb" value="${companyDetails.suburb}"
+                                       class="input-focus w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:border-primary focus:bg-white transition-all outline-none text-gray-900">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-3">City</label>
+                                <input type="text" id="city" value="${companyDetails.city}"
+                                       class="input-focus w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:border-primary focus:bg-white transition-all outline-none text-gray-900">
+                            </div>
+                        </div>
+
+                        <div class="pt-6 border-t border-gray-100">
+                            <h3 class="text-lg font-display font-semibold text-gray-900 mb-6">Banking Details</h3>
+                            
+                            <div class="space-y-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-3">Bank Name</label>
+                                    <input type="text" id="bank" value="${companyDetails.bank}"
+                                           class="input-focus w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:border-primary focus:bg-white transition-all outline-none text-gray-900">
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-3">Account Number</label>
+                                        <input type="text" id="accountNumber" value="${companyDetails.accountNumber}"
+                                               class="input-focus w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:border-primary focus:bg-white transition-all outline-none text-gray-900">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-3">Branch Code</label>
+                                        <input type="text" id="branchCode" value="${companyDetails.branchCode}"
+                                               class="input-focus w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:border-primary focus:bg-white transition-all outline-none text-gray-900">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4 pt-6">
+                            <button type="button" onclick="navigate('home')"
+                                    class="flex-1 px-8 py-4 bg-gray-100 text-gray-700 rounded-2xl font-medium hover:bg-gray-200 active:scale-[0.98] transition-all">
+                                Cancel
+                            </button>
+                            <button type="submit"
+                                    class="btn-primary flex-1 px-8 py-4 text-white rounded-2xl font-medium active:scale-[0.98]">
+                                Save Changes
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Dev Credit -->
+                    <div class="text-center mt-12">
+                        <p class="text-sm text-gray-400">
+                            Developed by <span class="font-medium text-gray-600">Gylan Gorrah</span>
+                        </p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Form Handlers
+        function handleQuoteSubmit(e) {
+            e.preventDefault();
+            const formData = {
+                clientName: document.getElementById('clientName').value,
+                description: document.getElementById('description').value,
+                amount: document.getElementById('amount').value,
+                date: document.getElementById('date').value || new Date().toISOString().split('T')[0],
+            };
+            generatePDF('quote', formData);
+        }
+
+        function handleInvoiceSubmit(e) {
+            e.preventDefault();
+            const formData = {
+                invoiceNumber: document.getElementById('invoiceNumber').value,
+                clientName: document.getElementById('clientName').value,
+                description: document.getElementById('description').value,
+                amount: document.getElementById('amount').value,
+                date: document.getElementById('date').value || new Date().toISOString().split('T')[0],
+            };
+            generatePDF('invoice', formData);
+        }
+
+        function handleSettingsSave(e) {
+            e.preventDefault();
+            companyDetails = {
+                name: document.getElementById('name').value,
+                address: document.getElementById('address').value,
+                suburb: document.getElementById('suburb').value,
+                city: document.getElementById('city').value,
+                province: companyDetails.province,
+                postal: companyDetails.postal,
+                bank: document.getElementById('bank').value,
+                accountType: companyDetails.accountType,
+                accountNumber: document.getElementById('accountNumber').value,
+                branchCode: document.getElementById('branchCode').value,
+            };
+            localStorage.setItem('ejToursCompany', JSON.stringify(companyDetails));
+            alert('Settings saved successfully!');
+            navigate('home');
+        }
+
+        // PDF Generator
+        function generatePDF(type, formData) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const pageWidth = doc.internal.pageSize.getWidth();
+            const pageHeight = doc.internal.pageSize.getHeight();
+
+            // Watermark (logo as base64)
+            try {
+                const logoBase64 = localStorage.getItem('ejToursLogo');
+                if (logoBase64) {
+                    doc.setGState(new doc.GState({ opacity: 0.05 }));
+                    doc.addImage(logoBase64, 'PNG', pageWidth/2 - 35, pageHeight/2 - 35, 70, 70);
+                    doc.setGState(new doc.GState({ opacity: 1 }));
+                }
+            } catch (e) {
+                console.log('Watermark not added');
+            }
+
+            // Header Background - Premium Navy
+            doc.setFillColor(26, 54, 93);
+            doc.rect(0, 0, pageWidth, 38, 'F');
+
+            // Company Name
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(22);
+            doc.setFont('helvetica', 'bold');
+            doc.text(companyDetails.name, 15, 16);
+
+            // Address
+            doc.setFontSize(8);
+            doc.setFont('helvetica', 'normal');
+            doc.text(companyDetails.address, 15, 24);
+            doc.text(`${companyDetails.suburb}, ${companyDetails.city}`, 15, 29);
+            doc.text(`${companyDetails.province}, ${companyDetails.postal}`, 15, 34);
+
+            // Document Type - Right aligned
+            doc.setTextColor(26, 54, 93);
+            doc.setFontSize(20);
+            doc.setFont('helvetica', 'bold');
+            const docType = type.toUpperCase();
+            doc.text(docType, pageWidth - 15, 18, { align: 'right' });
+
+            // Invoice/Quote Number
+            if (type === 'invoice' && formData.invoiceNumber) {
+                doc.setFontSize(10);
+                doc.setFont('helvetica', 'normal');
+                doc.setTextColor(100, 100, 100);
+                doc.text(`#${formData.invoiceNumber}`, pageWidth - 15, 26, { align: 'right' });
+            }
+
+            // Date
+            doc.setFontSize(8);
+            doc.setTextColor(140, 140, 140);
+            doc.text(formData.date, pageWidth - 15, 33, { align: 'right' });
+
+            // Bill To Section
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(9);
+            doc.setFont('helvetica', 'bold');
+            doc.text('BILL TO', 15, 54);
+
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(10);
+            doc.text(formData.clientName, 15, 61);
+
+            // Subtle Line
+            doc.setDrawColor(230, 230, 230);
+            doc.setLineWidth(0.3);
+            doc.line(15, 68, pageWidth - 15, 68);
+
+            // Table Header - Clean minimal design
+            doc.setFillColor(250, 250, 250);
+            doc.rect(15, 73, pageWidth - 30, 9, 'F');
+
+            doc.setTextColor(60, 60, 60);
+            doc.setFontSize(9);
+            doc.setFont('helvetica', 'bold');
+            doc.text('DESCRIPTION', 18, 79);
+            doc.text('AMOUNT', pageWidth - 18, 79, { align: 'right' });
+
+            // Service Description
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(9);
+            doc.setTextColor(0, 0, 0);
+            const splitDescription = doc.splitTextToSize(formData.description, pageWidth - 90);
+            doc.text(splitDescription, 18, 89);
+
+            // Amount
+            const amount = parseFloat(formData.amount).toFixed(2);
+            doc.text(`R${amount}`, pageWidth - 18, 89, { align: 'right' });
+
+            // Total Line
+            const totalY = 89 + (splitDescription.length * 5.5) + 8;
+            doc.setDrawColor(230, 230, 230);
+            doc.line(15, totalY, pageWidth - 15, totalY);
+
+            // Total
+            doc.setFontSize(11);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(0, 0, 0);
+            doc.text('TOTAL', pageWidth - 60, totalY + 9);
+            doc.text(`R${amount}`, pageWidth - 18, totalY + 9, { align: 'right' });
+
+            // Payment Details (for invoices only)
+            if (type === 'invoice') {
+                const bankingY = totalY + 22;
+                
+                doc.setFontSize(10);
+                doc.setTextColor(26, 54, 93);
+                doc.setFont('helvetica', 'bold');
+                doc.text('BANK ACCOUNT DETAILS', 15, bankingY);
+
+                doc.setTextColor(40, 40, 40);
+                doc.setFontSize(8);
+                doc.setFont('helvetica', 'normal');
+                doc.text(`Bank: ${companyDetails.bank}`, 15, bankingY + 8);
+                doc.text(`Account Type: ${companyDetails.accountType}`, 15, bankingY + 14);
+                doc.text(`Account Number: ${companyDetails.accountNumber}`, 15, bankingY + 20);
+                doc.text(`Branch Code: ${companyDetails.branchCode}`, 15, bankingY + 26);
+            } else {
+                // Quote Note
+                const noteY = totalY + 22;
+                doc.setFontSize(8);
+                doc.setTextColor(120, 120, 120);
+                doc.setFont('helvetica', 'italic');
+                doc.text('This quote is valid for 30 days from the date of issue.', 15, noteY);
+                doc.text('Payment details will be provided upon acceptance.', 15, noteY + 5);
+            }
+
+            // Footer - Developer Credit
+            doc.setFontSize(7);
+            doc.setTextColor(160, 160, 160);
+            doc.setFont('helvetica', 'normal');
+            doc.text('Thank you for your business', pageWidth / 2, pageHeight - 20, { align: 'center' });
+            doc.setTextColor(140, 140, 140);
+            doc.text('Developed by Gylan Gorrah', pageWidth / 2, pageHeight - 15, { align: 'center' });
+
+            // Minimal Border
+            doc.setDrawColor(26, 54, 93);
+            doc.setLineWidth(0.5);
+            doc.rect(8, 8, pageWidth - 16, pageHeight - 16);
+
+            // Save
+            const filename = type === 'invoice' 
+                ? `EJ-Tours-Invoice-${formData.invoiceNumber || Date.now()}.pdf`
+                : `EJ-Tours-Quote-${Date.now()}.pdf`;
+            
+            doc.save(filename);
+            alert(`${type.charAt(0).toUpperCase() + type.slice(1)} generated successfully!`);
+        }
+
+        // Render function
+        function render() {
+            const app = document.getElementById('app');
+            
+            let content = '';
+            switch(currentView) {
+                case 'home':
+                    content = renderHome();
+                    break;
+                case 'quote':
+                    content = renderQuote();
+                    break;
+                case 'invoice':
+                    content = renderInvoice();
+                    break;
+                case 'settings':
+                    content = renderSettings();
+                    break;
+            }
+            
+            app.innerHTML = content;
+            
+            // Set today's date by default
+            const dateInputs = document.querySelectorAll('input[type="date"]');
+            dateInputs.forEach(input => {
+                if (!input.value) {
+                    input.value = new Date().toISOString().split('T')[0];
+                }
+            });
+        }
+
+        // Initial render
+        render();
+    </script>
+</body>
+</html>
