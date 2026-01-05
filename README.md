@@ -12,11 +12,13 @@ This is a single-page web application that allows EJ Tours to generate professio
 - **Contact Information**: Capture company and customer contact details (email and phone)
 - **PDF Export**: Generate and download PDF documents with custom formatting
 - **Glassmorphic Confirmation**: Beautiful frosted-glass success modal with document summary
-- **Premium UI**: Enhanced button visibility and professional glassmorphic design
+- **Premium Charcoal Theme**: Elegant black/charcoal color scheme throughout
+- **Blade Shimmer Animation**: Subtle light sweep effect on key elements every 4 seconds
+- **Clean PDF Footer**: Professional look with only thank you message
 - **Company Management**: Configure and save company details, contact info, and banking information
 - **Customer Details**: Record customer phone numbers for quotes and invoices
 - **Responsive Design**: Works seamlessly on desktop and mobile devices
-- **Modern Animations**: Smooth transitions and premium feel throughout
+- **Modern Animations**: Smooth transitions, premium feel, and blade shimmer effects
 - **Data Persistence**: Company settings saved in browser localStorage
 
 ## New in This Version
@@ -125,18 +127,17 @@ npx serve .
 - **In Bill To Section**: Customer name and phone number
 - **Professional formatting**: Clean, easy-to-read layout
 
-### Success Modal Features
-- **Glassmorphic Design**: Frosted glass effect with backdrop blur
-- **Document Summary**: Complete breakdown of generated document details
-- **Premium Animations**: Smooth fade-in and slide-up transitions
-- **Click-to-Close**: Close modal by clicking outside or using the Done button
-- **Mobile Responsive**: Adapts beautifully to all screen sizes
+### Premium Visual Features
+- **Charcoal Color Scheme**: Professional black/charcoal theme throughout
+- **Blade Shimmer Animation**: Light sweeps across key elements like polished blade steel
+- **Glassmorphic Modals**: Frosted glass effect with charcoal icons and buttons
+- **Smooth Transitions**: Cubic-bezier easing for natural motion
 
 ### Enhanced Button Design
-- **Improved Borders**: 2px borders on primary and secondary buttons
-- **Subtle Shadows**: Enhanced depth with professional shadow effects
-- **Better Contrast**: Input fields with 1.5px borders for clarity
-- **Hover States**: Interactive feedback on all clickable elements
+- **Charcoal Gradient**: Primary buttons use elegant black gradient (#1a1a1a → #2d2d2d)
+- **Blade Shimmer**: Subtle white light sweep animation every 4 seconds
+- **Premium Contrast**: White text on dark charcoal buttons
+- **Enhanced Shadows**: Professional depth with charcoal-themed shadows
 
 ### Customization
 - Company details configurable through settings
@@ -170,7 +171,7 @@ EJ's Doc App/
 
 ## Developer Information
 
-- **Developer**: Gylan Gorrah
+- **Developer**: Dylan Gorrah
 - **Company**: EJ Tours and Projects
 - **Location**: Cape Town, Western Cape, South Africa
 - **Application Type**: Single-page web application

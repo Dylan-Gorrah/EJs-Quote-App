@@ -62,7 +62,44 @@
         body { 
             font-family: 'DM Sans', sans-serif;
             letter-spacing: -0.01em;
+            background: white;
         }
+        
+        /* Blade Shimmer Animation - Every 4 seconds */
+        @keyframes bladeShimmer {
+            0%, 90%, 100% {
+                background-position: -200% center;
+            }
+            45% {
+                background-position: 200% center;
+            }
+        }
+        
+        .shimmer-effect {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .shimmer-effect::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.1) 45%,
+                rgba(255, 255, 255, 0.3) 50%,
+                rgba(255, 255, 255, 0.1) 55%,
+                transparent 100%
+            );
+            background-size: 200% 100%;
+            animation: bladeShimmer 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
         .fade-in { 
             animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1); 
         }
@@ -78,11 +115,12 @@
         }
         .card-hover { 
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            border: 1px solid rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.98);
         }
         .card-hover:hover { 
             transform: translateY(-8px) scale(1.01);
-            box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.3);
             border-color: rgba(26, 54, 93, 0.15);
         }
         .card-hover:active { 
@@ -118,7 +156,7 @@
             border-color: rgba(26, 54, 93, 0.3);
         }
         
-        /* Glassmorphic Modal */
+        /* Glassmorphic Modal - Compact */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -145,9 +183,9 @@
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-radius: 32px;
-            padding: 48px;
-            max-width: 520px;
+            border-radius: 24px;
+            padding: 32px;
+            max-width: 400px;
             width: 100%;
             box-shadow: 
                 0 32px 64px -12px rgba(0, 0, 0, 0.25),
@@ -164,23 +202,27 @@
         }
         
         .modal-icon {
-            width: 80px;
-            height: 80px;
+            width: 64px;
+            height: 64px;
             background: linear-gradient(135deg, #1a365d 0%, #2d4a75 100%);
-            border-radius: 24px;
+            border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 24px;
+            margin: 0 auto 20px;
             box-shadow: 0 12px 24px rgba(26, 54, 93, 0.3);
+        }
+        
+        .checkmark-green {
+            color: #10b981 !important;
         }
         
         .summary-item {
             background: rgba(26, 54, 93, 0.03);
             border: 1px solid rgba(26, 54, 93, 0.08);
-            border-radius: 16px;
-            padding: 16px 20px;
-            margin-bottom: 12px;
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 8px;
             transition: all 0.2s ease;
         }
         
@@ -193,15 +235,15 @@
             background: linear-gradient(135deg, #1a365d 0%, #2d4a75 100%);
             color: white;
             border: none;
-            border-radius: 16px;
-            padding: 16px 32px;
-            font-size: 16px;
+            border-radius: 12px;
+            padding: 14px 28px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             box-shadow: 0 8px 16px rgba(26, 54, 93, 0.25);
             width: 100%;
-            margin-top: 8px;
+            margin-top: 6px;
         }
         
         .modal-button:hover {
@@ -257,7 +299,7 @@
                 <div class="fade-in p-8 max-w-6xl mx-auto">
                     <!-- Header -->
                     <div class="text-center mb-20 pt-12">
-                        <h1 class="text-6xl md:text-7xl font-display font-bold text-gray-900 mb-3 tracking-tight">
+                        <h1 class="shimmer-effect text-6xl md:text-7xl font-display font-bold text-gray-900 mb-3 tracking-tight">
                             EJ TOURS
                         </h1>
                         <p class="text-lg text-gray-500 font-light tracking-wide">
@@ -305,7 +347,7 @@
                     <!-- Footer -->
                     <div class="text-center pt-8 border-t border-gray-100">
                         <p class="text-sm text-gray-400">
-                            Developed by <span class="font-medium text-gray-600">Gylan Gorrah</span>
+                            Developed by <span class="shimmer-effect font-medium text-gray-600">Dylan Gorrah</span>
                         </p>
                     </div>
                 </div>
@@ -336,7 +378,7 @@
                             <label class="block text-sm font-medium text-gray-700 mb-3">Client Name</label>
                             <input type="text" id="clientName" required
                                    class="input-focus w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:border-primary focus:bg-white transition-all outline-none text-gray-900"
-                                   placeholder="Professional Vision Group">
+                                   placeholder="John Doe">
                         </div>
 
                         <div>
@@ -382,7 +424,7 @@
                     <!-- Dev Credit -->
                     <div class="text-center mt-12">
                         <p class="text-sm text-gray-400">
-                            Developed by <span class="font-medium text-gray-600">Gylan Gorrah</span>
+                            Developed by <span class="shimmer-effect font-medium text-gray-600">Dylan Gorrah</span>
                         </p>
                     </div>
                 </div>
@@ -420,7 +462,7 @@
                             <label class="block text-sm font-medium text-gray-700 mb-3">Client Name</label>
                             <input type="text" id="clientName" required
                                    class="input-focus w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:border-primary focus:bg-white transition-all outline-none text-gray-900"
-                                   placeholder="Professional Vision Group">
+                                   placeholder="John Doe">
                         </div>
 
                         <div>
@@ -466,7 +508,7 @@
                     <!-- Dev Credit -->
                     <div class="text-center mt-12">
                         <p class="text-sm text-gray-400">
-                            Developed by <span class="font-medium text-gray-600">Gylan Gorrah</span>
+                            Developed by <span class="shimmer-effect font-medium text-gray-600">Dylan Gorrah</span>
                         </p>
                     </div>
                 </div>
@@ -573,7 +615,7 @@
                     <!-- Dev Credit -->
                     <div class="text-center mt-12">
                         <p class="text-sm text-gray-400">
-                            Developed by <span class="font-medium text-gray-600">Gylan Gorrah</span>
+                            Developed by <span class="shimmer-effect font-medium text-gray-600">Dylan Gorrah</span>
                         </p>
                     </div>
                 </div>
@@ -631,15 +673,15 @@
                 <div class="modal-overlay" onclick="closeModal(event)">
                     <div class="modal-content" onclick="event.stopPropagation()">
                         <div class="modal-icon">
-                            <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-10 h-10 checkmark-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
                             </svg>
                         </div>
                         
-                        <h2 class="text-3xl font-display font-bold text-gray-900 text-center mb-2">
+                        <h2 class="text-2xl font-display font-bold text-gray-900 text-center mb-1">
                             Settings Saved!
                         </h2>
-                        <p class="text-gray-500 text-center mb-8">
+                        <p class="text-gray-500 text-center mb-6 text-sm">
                             Your company information has been updated successfully
                         </p>
                         
@@ -665,20 +707,20 @@
                 <div class="modal-overlay" onclick="closeModal(event)">
                     <div class="modal-content" onclick="event.stopPropagation()">
                         <div class="modal-icon">
-                            <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-10 h-10 checkmark-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
                             </svg>
                         </div>
                         
-                        <h2 class="text-3xl font-display font-bold text-gray-900 text-center mb-2">
+                        <h2 class="text-2xl font-display font-bold text-gray-900 text-center mb-1">
                             ${docType} Generated!
                         </h2>
-                        <p class="text-gray-500 text-center mb-8">
+                        <p class="text-gray-500 text-center mb-6 text-sm">
                             Your document has been created successfully
                         </p>
                         
-                        <div class="mb-8">
-                            <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">Document Summary</p>
+                        <div class="mb-6">
+                            <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Document Summary</p>
                             
                             ${type === 'invoice' ? `
                             <div class="summary-item">
@@ -698,7 +740,7 @@
                             
                             <div class="summary-item">
                                 <div class="text-xs text-gray-500 mb-1">Amount</div>
-                                <div class="font-semibold text-gray-900 text-xl">R${parseFloat(formData.amount).toFixed(2)}</div>
+                                <div class="font-semibold text-gray-900 text-lg">R${parseFloat(formData.amount).toFixed(2)}</div>
                             </div>
                             
                             <div class="summary-item">
@@ -865,13 +907,11 @@
                 doc.text('Payment details will be provided upon acceptance.', 15, noteY + 5);
             }
 
-            // Footer - Developer Credit
+            // Footer
             doc.setFontSize(7);
             doc.setTextColor(160, 160, 160);
             doc.setFont('helvetica', 'normal');
-            doc.text('Thank you for your business', pageWidth / 2, pageHeight - 20, { align: 'center' });
-            doc.setTextColor(140, 140, 140);
-            doc.text('Developed by Gylan Gorrah', pageWidth / 2, pageHeight - 15, { align: 'center' });
+            doc.text('Thank you for your business', pageWidth / 2, pageHeight - 15, { align: 'center' });
 
             // Minimal Border
             doc.setDrawColor(26, 54, 93);
