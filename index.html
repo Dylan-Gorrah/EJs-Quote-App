@@ -78,10 +78,12 @@
         }
         .card-hover { 
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid rgba(0, 0, 0, 0.08);
         }
         .card-hover:hover { 
             transform: translateY(-8px) scale(1.01);
             box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.15);
+            border-color: rgba(26, 54, 93, 0.15);
         }
         .card-hover:active { 
             transform: translateY(-4px) scale(0.99);
@@ -90,6 +92,7 @@
             background: linear-gradient(135deg, #1a365d 0%, #2d4a75 100%);
             box-shadow: 0 4px 16px rgba(26, 54, 93, 0.3);
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 2px solid rgba(255, 255, 255, 0.1);
         }
         .btn-primary:hover {
             box-shadow: 0 8px 24px rgba(26, 54, 93, 0.4);
@@ -98,11 +101,116 @@
         .btn-primary:active {
             transform: translateY(0);
         }
+        .btn-secondary {
+            border: 2px solid rgba(0, 0, 0, 0.08);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .btn-secondary:hover {
+            border-color: rgba(0, 0, 0, 0.15);
+            background: rgba(0, 0, 0, 0.02);
+        }
         .input-focus {
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1.5px solid rgba(0, 0, 0, 0.1);
         }
         .input-focus:focus {
             box-shadow: 0 0 0 4px rgba(26, 54, 93, 0.08);
+            border-color: rgba(26, 54, 93, 0.3);
+        }
+        
+        /* Glassmorphic Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 0;
+            animation: fadeInModal 0.3s ease-out forwards;
+            padding: 20px;
+        }
+        
+        @keyframes fadeInModal {
+            to { opacity: 1; }
+        }
+        
+        .modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 32px;
+            padding: 48px;
+            max-width: 520px;
+            width: 100%;
+            box-shadow: 
+                0 32px 64px -12px rgba(0, 0, 0, 0.25),
+                0 0 0 1px rgba(255, 255, 255, 0.5),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.8);
+            transform: scale(0.9) translateY(20px);
+            animation: slideUpModal 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        
+        @keyframes slideUpModal {
+            to {
+                transform: scale(1) translateY(0);
+            }
+        }
+        
+        .modal-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #1a365d 0%, #2d4a75 100%);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            box-shadow: 0 12px 24px rgba(26, 54, 93, 0.3);
+        }
+        
+        .summary-item {
+            background: rgba(26, 54, 93, 0.03);
+            border: 1px solid rgba(26, 54, 93, 0.08);
+            border-radius: 16px;
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            transition: all 0.2s ease;
+        }
+        
+        .summary-item:hover {
+            background: rgba(26, 54, 93, 0.05);
+            border-color: rgba(26, 54, 93, 0.12);
+        }
+        
+        .modal-button {
+            background: linear-gradient(135deg, #1a365d 0%, #2d4a75 100%);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            padding: 16px 32px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 8px 16px rgba(26, 54, 93, 0.25);
+            width: 100%;
+            margin-top: 8px;
+        }
+        
+        .modal-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(26, 54, 93, 0.35);
+        }
+        
+        .modal-button:active {
+            transform: translateY(0);
         }
     </style>
 </head>
@@ -120,6 +228,8 @@
             city: 'Cape Town',
             province: 'Western Cape',
             postal: '7780',
+            email: 'ejtoursandprojects@gmail.com',
+            phone: '+27 74 931 0308',
             bank: 'FNB',
             accountType: 'Business Account',
             accountNumber: '62865392676',
@@ -230,6 +340,13 @@
                         </div>
 
                         <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-3">Client Phone Number</label>
+                            <input type="tel" id="clientPhone" required
+                                   class="input-focus w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:border-primary focus:bg-white transition-all outline-none text-gray-900"
+                                   placeholder="+27 12 345 6789">
+                        </div>
+
+                        <div>
                             <label class="block text-sm font-medium text-gray-700 mb-3">Service Description</label>
                             <textarea id="description" rows="4" required
                                       class="input-focus w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:border-primary focus:bg-white transition-all outline-none resize-none text-gray-900"
@@ -252,7 +369,7 @@
 
                         <div class="flex gap-4 pt-6">
                             <button type="button" onclick="navigate('home')"
-                                    class="flex-1 px-8 py-4 bg-gray-100 text-gray-700 rounded-2xl font-medium hover:bg-gray-200 active:scale-[0.98] transition-all">
+                                    class="btn-secondary flex-1 px-8 py-4 bg-gray-100 text-gray-700 rounded-2xl font-medium hover:bg-gray-200 active:scale-[0.98] transition-all">
                                 Cancel
                             </button>
                             <button type="submit"
@@ -307,6 +424,13 @@
                         </div>
 
                         <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-3">Client Phone Number</label>
+                            <input type="tel" id="clientPhone" required
+                                   class="input-focus w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:border-primary focus:bg-white transition-all outline-none text-gray-900"
+                                   placeholder="+27 12 345 6789">
+                        </div>
+
+                        <div>
                             <label class="block text-sm font-medium text-gray-700 mb-3">Service Description</label>
                             <textarea id="description" rows="4" required
                                       class="input-focus w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:border-primary focus:bg-white transition-all outline-none resize-none text-gray-900"
@@ -318,7 +442,7 @@
                                 <label class="block text-sm font-medium text-gray-700 mb-3">Amount (R)</label>
                                 <input type="number" id="amount" step="0.01" required
                                        class="input-focus w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:border-primary focus:bg-white transition-all outline-none text-gray-900"
-                                       placeholder="2500.00">
+                                       placeholder="5000.00">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-3">Date</label>
@@ -329,7 +453,7 @@
 
                         <div class="flex gap-4 pt-6">
                             <button type="button" onclick="navigate('home')"
-                                    class="flex-1 px-8 py-4 bg-gray-100 text-gray-700 rounded-2xl font-medium hover:bg-gray-200 active:scale-[0.98] transition-all">
+                                    class="btn-secondary flex-1 px-8 py-4 bg-gray-100 text-gray-700 rounded-2xl font-medium hover:bg-gray-200 active:scale-[0.98] transition-all">
                                 Cancel
                             </button>
                             <button type="submit"
@@ -394,6 +518,21 @@
                             </div>
                         </div>
 
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-3">Email Address</label>
+                                <input type="email" id="email" value="${companyDetails.email}"
+                                       class="input-focus w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:border-primary focus:bg-white transition-all outline-none text-gray-900"
+                                       placeholder="contact@company.com">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-3">Phone Number</label>
+                                <input type="tel" id="phone" value="${companyDetails.phone}"
+                                       class="input-focus w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:border-primary focus:bg-white transition-all outline-none text-gray-900"
+                                       placeholder="+27 12 345 6789">
+                            </div>
+                        </div>
+
                         <div class="pt-6 border-t border-gray-100">
                             <h3 class="text-lg font-display font-semibold text-gray-900 mb-6">Banking Details</h3>
                             
@@ -421,7 +560,7 @@
 
                         <div class="flex gap-4 pt-6">
                             <button type="button" onclick="navigate('home')"
-                                    class="flex-1 px-8 py-4 bg-gray-100 text-gray-700 rounded-2xl font-medium hover:bg-gray-200 active:scale-[0.98] transition-all">
+                                    class="btn-secondary flex-1 px-8 py-4 bg-gray-100 text-gray-700 rounded-2xl font-medium hover:bg-gray-200 active:scale-[0.98] transition-all">
                                 Cancel
                             </button>
                             <button type="submit"
@@ -446,6 +585,7 @@
             e.preventDefault();
             const formData = {
                 clientName: document.getElementById('clientName').value,
+                clientPhone: document.getElementById('clientPhone').value,
                 description: document.getElementById('description').value,
                 amount: document.getElementById('amount').value,
                 date: document.getElementById('date').value || new Date().toISOString().split('T')[0],
@@ -458,6 +598,7 @@
             const formData = {
                 invoiceNumber: document.getElementById('invoiceNumber').value,
                 clientName: document.getElementById('clientName').value,
+                clientPhone: document.getElementById('clientPhone').value,
                 description: document.getElementById('description').value,
                 amount: document.getElementById('amount').value,
                 date: document.getElementById('date').value || new Date().toISOString().split('T')[0],
@@ -474,14 +615,115 @@
                 city: document.getElementById('city').value,
                 province: companyDetails.province,
                 postal: companyDetails.postal,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
                 bank: document.getElementById('bank').value,
                 accountType: companyDetails.accountType,
                 accountNumber: document.getElementById('accountNumber').value,
                 branchCode: document.getElementById('branchCode').value,
             };
             localStorage.setItem('ejToursCompany', JSON.stringify(companyDetails));
-            alert('Settings saved successfully!');
-            navigate('home');
+            showSettingsSuccessModal();
+        }
+        
+        function showSettingsSuccessModal() {
+            const modalHtml = `
+                <div class="modal-overlay" onclick="closeModal(event)">
+                    <div class="modal-content" onclick="event.stopPropagation()">
+                        <div class="modal-icon">
+                            <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                            </svg>
+                        </div>
+                        
+                        <h2 class="text-3xl font-display font-bold text-gray-900 text-center mb-2">
+                            Settings Saved!
+                        </h2>
+                        <p class="text-gray-500 text-center mb-8">
+                            Your company information has been updated successfully
+                        </p>
+                        
+                        <button onclick="closeModalAndNavigate()" class="modal-button">
+                            Done
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+        }
+        
+        function closeModalAndNavigate() {
+            closeModal();
+            setTimeout(() => navigate('home'), 300);
+        }
+
+        // Show Success Modal with Summary
+        function showSuccessModal(type, formData) {
+            const docType = type.charAt(0).toUpperCase() + type.slice(1);
+            const modalHtml = `
+                <div class="modal-overlay" onclick="closeModal(event)">
+                    <div class="modal-content" onclick="event.stopPropagation()">
+                        <div class="modal-icon">
+                            <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                            </svg>
+                        </div>
+                        
+                        <h2 class="text-3xl font-display font-bold text-gray-900 text-center mb-2">
+                            ${docType} Generated!
+                        </h2>
+                        <p class="text-gray-500 text-center mb-8">
+                            Your document has been created successfully
+                        </p>
+                        
+                        <div class="mb-8">
+                            <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">Document Summary</p>
+                            
+                            ${type === 'invoice' ? `
+                            <div class="summary-item">
+                                <div class="text-xs text-gray-500 mb-1">Invoice Number</div>
+                                <div class="font-semibold text-gray-900">#${formData.invoiceNumber}</div>
+                            </div>` : ''}
+                            
+                            <div class="summary-item">
+                                <div class="text-xs text-gray-500 mb-1">Client</div>
+                                <div class="font-semibold text-gray-900">${formData.clientName}</div>
+                            </div>
+                            
+                            <div class="summary-item">
+                                <div class="text-xs text-gray-500 mb-1">Phone</div>
+                                <div class="font-semibold text-gray-900">${formData.clientPhone}</div>
+                            </div>
+                            
+                            <div class="summary-item">
+                                <div class="text-xs text-gray-500 mb-1">Amount</div>
+                                <div class="font-semibold text-gray-900 text-xl">R${parseFloat(formData.amount).toFixed(2)}</div>
+                            </div>
+                            
+                            <div class="summary-item">
+                                <div class="text-xs text-gray-500 mb-1">Date</div>
+                                <div class="font-semibold text-gray-900">${formData.date}</div>
+                            </div>
+                        </div>
+                        
+                        <button onclick="closeModal()" class="modal-button">
+                            Done
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+        }
+        
+        function closeModal(event) {
+            if (event && event.target.classList.contains('modal-content')) return;
+            const modal = document.querySelector('.modal-overlay');
+            if (modal) {
+                modal.style.opacity = '0';
+                setTimeout(() => modal.remove(), 300);
+            }
         }
 
         // PDF Generator
@@ -505,7 +747,7 @@
 
             // Header Background - Premium Navy
             doc.setFillColor(26, 54, 93);
-            doc.rect(0, 0, pageWidth, 38, 'F');
+            doc.rect(0, 0, pageWidth, 45, 'F');
 
             // Company Name
             doc.setTextColor(255, 255, 255);
@@ -519,6 +761,10 @@
             doc.text(companyDetails.address, 15, 24);
             doc.text(`${companyDetails.suburb}, ${companyDetails.city}`, 15, 29);
             doc.text(`${companyDetails.province}, ${companyDetails.postal}`, 15, 34);
+            
+            // Company Contact Info
+            doc.text(`Email: ${companyDetails.email}`, 15, 39);
+            doc.text(`Phone: ${companyDetails.phone}`, 15, 44);
 
             // Document Type - Right aligned
             doc.setTextColor(26, 54, 93);
@@ -544,40 +790,45 @@
             doc.setTextColor(0, 0, 0);
             doc.setFontSize(9);
             doc.setFont('helvetica', 'bold');
-            doc.text('BILL TO', 15, 54);
+            doc.text('BILL TO', 15, 60);
 
             doc.setFont('helvetica', 'normal');
             doc.setFontSize(10);
-            doc.text(formData.clientName, 15, 61);
+            doc.text(formData.clientName, 15, 67);
+            
+            // Client Phone
+            doc.setFontSize(9);
+            doc.setTextColor(80, 80, 80);
+            doc.text(`Phone: ${formData.clientPhone}`, 15, 73);
 
             // Subtle Line
             doc.setDrawColor(230, 230, 230);
             doc.setLineWidth(0.3);
-            doc.line(15, 68, pageWidth - 15, 68);
+            doc.line(15, 80, pageWidth - 15, 80);
 
             // Table Header - Clean minimal design
             doc.setFillColor(250, 250, 250);
-            doc.rect(15, 73, pageWidth - 30, 9, 'F');
+            doc.rect(15, 85, pageWidth - 30, 9, 'F');
 
             doc.setTextColor(60, 60, 60);
             doc.setFontSize(9);
             doc.setFont('helvetica', 'bold');
-            doc.text('DESCRIPTION', 18, 79);
-            doc.text('AMOUNT', pageWidth - 18, 79, { align: 'right' });
+            doc.text('DESCRIPTION', 18, 91);
+            doc.text('AMOUNT', pageWidth - 18, 91, { align: 'right' });
 
             // Service Description
             doc.setFont('helvetica', 'normal');
             doc.setFontSize(9);
             doc.setTextColor(0, 0, 0);
             const splitDescription = doc.splitTextToSize(formData.description, pageWidth - 90);
-            doc.text(splitDescription, 18, 89);
+            doc.text(splitDescription, 18, 101);
 
             // Amount
             const amount = parseFloat(formData.amount).toFixed(2);
-            doc.text(`R${amount}`, pageWidth - 18, 89, { align: 'right' });
+            doc.text(`R${amount}`, pageWidth - 18, 101, { align: 'right' });
 
             // Total Line
-            const totalY = 89 + (splitDescription.length * 5.5) + 8;
+            const totalY = 101 + (splitDescription.length * 5.5) + 8;
             doc.setDrawColor(230, 230, 230);
             doc.line(15, totalY, pageWidth - 15, totalY);
 
@@ -633,7 +884,7 @@
                 : `EJ-Tours-Quote-${Date.now()}.pdf`;
             
             doc.save(filename);
-            alert(`${type.charAt(0).toUpperCase() + type.slice(1)} generated successfully!`);
+            showSuccessModal(type, formData);
         }
 
         // Render function
